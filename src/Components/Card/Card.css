@@ -1,0 +1,26 @@
+.card {
+  border: 1px solid #95a0a7;
+  border-radius: 8px;
+  position: relative;
+}
+.card-inner {
+  padding: 8px;
+  padding-bottom: 50px;
+}
+.card img {
+  width: 100%;
+  border-radius: 8px;
+}
+.btn-div button {
+  width: 100%;
+  padding: 12px 10px;
+  border: none;
+  background-color: #ffe0b3;
+  border-radius: 0px 0px 8px 8px;
+  position: absolute;
+  bottom: 0;
+}
+.btn-div button:hover {
+  cursor: pointer;
+  background-color: orange;
+}
