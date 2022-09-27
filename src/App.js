@@ -5,16 +5,27 @@ import Header from "./Components/Header/Header";
 import Osummary from "./Components/Osummary/Osummary";
 
 function App() {
+  let initial = [];
+  if (localStorage.getItem("cart")) {
+    initial = JSON.parse(localStorage.getItem("cart"));
+  }
   const [products, setProducts] = useState([]);
   useEffect(() => {
     fetch("products.json")
       .then((res) => res.json())
       .then((data) => setProducts(data));
   }, []);
-  const [addedProducts, setAddedProducts] = useState([]);
+
+  const [addedProducts, setAddedProducts] = useState(initial);
+
   const addToCart = (product) => {
-    setAddedProducts([...addedProducts, product]);
+    const newProducts = [...addedProducts, product];
+    setAddedProducts(newProducts);
+
+    // set to localstorage
+    localStorage.setItem("cart", JSON.stringify(newProducts));
   };
+
   return (
     <div className="App">
       <Header></Header>
