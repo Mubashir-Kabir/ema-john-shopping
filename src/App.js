@@ -1,51 +1,30 @@
-import { useEffect, useState } from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
-import Card from "./Components/Card/Card";
-import Header from "./Components/Header/Header";
-import Osummary from "./Components/Osummary/Osummary";
+import Main from "./Layout/Main";
+import Order from "./Outlets/Order";
 
 function App() {
-  let initial = [];
-  if (localStorage.getItem("cart")) {
-    initial = JSON.parse(localStorage.getItem("cart"));
-  }
-  const [products, setProducts] = useState([]);
-  useEffect(() => {
-    fetch("products.json")
-      .then((res) => res.json())
-      .then((data) => setProducts(data));
-  }, []);
-
-  const [addedProducts, setAddedProducts] = useState(initial);
-
-  const addToCart = (product) => {
-    const newProducts = [...addedProducts, product];
-    setAddedProducts(newProducts);
-
-    // set to localstorage
-    localStorage.setItem("cart", JSON.stringify(newProducts));
-  };
-
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Main></Main>,
+      children: [
+        {
+          path: "/",
+          loader: () => fetch("products.json"),
+          element: <Order></Order>,
+        },
+        {
+          path: "/order",
+          loader: () => fetch("products.json"),
+          element: <Order></Order>,
+        },
+      ],
+    },
+  ]);
   return (
     <div className="App">
-      <Header></Header>
-      <div className="main-container">
-        <div className="cards-container">
-          {products.map((product) => (
-            <Card
-              product={product}
-              addToCart={addToCart}
-              key={product.id}
-            ></Card>
-          ))}
-        </div>
-        <div className="order-summary">
-          <Osummary
-            addedProducts={addedProducts}
-            setAddedProducts={setAddedProducts}
-          ></Osummary>
-        </div>
-      </div>
+      <RouterProvider router={router}></RouterProvider>
     </div>
   );
 }
