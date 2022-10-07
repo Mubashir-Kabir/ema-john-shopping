@@ -3,7 +3,7 @@ import "./Osummary.css";
 
 const Osummary = ({ addedProducts, setAddedProducts }) => {
   const total = addedProducts?.reduce(
-    (total, product) => total + product.price,
+    (total, product) => (total + product.price) * product.quantity,
     0
   );
   const shipping = addedProducts?.reduce(

@@ -10,7 +10,6 @@ const Order = () => {
   let initial = [];
   if (localStorage.getItem("shopping-cart")) {
     const stored = JSON.parse(localStorage.getItem("shopping-cart"));
-    console.log(stored);
     stored.forEach((element) => {
       initial.push(
         products.find((product) => {
@@ -22,13 +21,23 @@ const Order = () => {
       );
     });
   }
-
   const [addedProducts, setAddedProducts] = useState(initial);
 
   const addToCart = (product) => {
-    const newProducts = [...addedProducts, product];
-    setAddedProducts(newProducts);
-
+    let flag;
+    addedProducts?.forEach((element) => {
+      if (element.id === product.id) {
+        element.quantity += 1;
+        flag = true;
+      }
+    });
+    if (flag) {
+      const newProducts = [...addedProducts];
+      setAddedProducts(newProducts);
+    } else {
+      const newProducts = [...addedProducts, product];
+      setAddedProducts(newProducts);
+    }
     // set to localstorage
     addToDb(product.id);
   };
