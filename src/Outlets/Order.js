@@ -3,14 +3,25 @@ import { useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import Card from "../Components/Card/Card";
 import Osummary from "../Components/Osummary/Osummary";
+import { addToDb } from "../utilities/fakedb";
 
 const Order = () => {
-  let initial = [];
-  if (localStorage.getItem("cart")) {
-    initial = JSON.parse(localStorage.getItem("cart"));
-  }
   const products = useLoaderData();
-  console.log(products);
+  let initial = [];
+  if (localStorage.getItem("shopping-cart")) {
+    const stored = JSON.parse(localStorage.getItem("shopping-cart"));
+    console.log(stored);
+    stored.forEach((element) => {
+      initial.push(
+        products.find((product) => {
+          if (product.id === element.id) {
+            product.quantity = element.quantity;
+          }
+          return product;
+        })
+      );
+    });
+  }
 
   const [addedProducts, setAddedProducts] = useState(initial);
 
@@ -19,7 +30,7 @@ const Order = () => {
     setAddedProducts(newProducts);
 
     // set to localstorage
-    localStorage.setItem("cart", JSON.stringify(newProducts));
+    addToDb(product.id);
   };
   return (
     <div>
